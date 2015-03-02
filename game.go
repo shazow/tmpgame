@@ -68,10 +68,6 @@ func (u unit) Position() Tile {
 	return u.position
 }
 
-func (u unit) Target() Tile {
-	return u.target
-}
-
 func (u unit) Alive() bool {
 	return u.health > 0
 }
