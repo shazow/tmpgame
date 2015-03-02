@@ -14,7 +14,8 @@ type Waypoint interface {
 }
 
 type Attacker interface {
-	Attack()
+	// Returns damage
+	Attack() int
 }
 
 type Defender interface {
@@ -29,9 +30,7 @@ type unit struct {
 }
 
 func (u *unit) Defend(w weapon) {
-	w.Attack()
-	// TODO: Random roll?
-	u.Health -= w.Damage
+	u.Health -= w.Attack()
 }
 
 type weapon struct {
@@ -39,7 +38,10 @@ type weapon struct {
 	Damage int
 }
 
-func (w *weapon) Attack() {}
+func (w weapon) Attack() int {
+	// TODO: Random roll?
+	return w.Damage
+}
 
 type Merchant struct {
 	*unit
