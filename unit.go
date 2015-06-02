@@ -9,7 +9,7 @@ type Attacker interface {
 
 type Defender interface {
 	Alive() bool
-	Defend(a Attacker)
+	Defend(Attacker)
 }
 
 type Unit interface {

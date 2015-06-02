@@ -1,8 +1,9 @@
 package tmpgame
 
-type Building interface {
+type Enclosure interface {
 	Entity
 	Enter(Unit) error
+	Exit(Unit) error
 }
 
 //
@@ -10,14 +11,14 @@ type Building interface {
 //
 
 type Outpost struct {
-	Building
+	Enclosure
 	Defender
 }
 
 type Town struct {
-	Building
+	Enclosure
 }
 
 type Bridge struct {
-	Building
+	Enclosure
 }
