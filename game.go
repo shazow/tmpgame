@@ -1,7 +1,6 @@
 package tmpgame
 
 type Query interface {
-	Path(Tile) Waypoint
 	Nearby(Unit) []Unit
 }
 

@@ -4,7 +4,7 @@ type Attacker interface {
 	// Returns damage
 	Attack() int
 	// Position of the attacker
-	Position() Tile
+	Position() Position
 }
 
 type Defender interface {
@@ -43,8 +43,8 @@ type Thief struct {
 type unit struct {
 	name     string
 	path     Waypoint
-	position *Tile
-	target   *Tile
+	position *Position
+	target   *Position
 	health   int
 }
 
@@ -52,7 +52,7 @@ func (u unit) Name() string {
 	return u.name
 }
 
-func (u unit) Position() Tile {
+func (u unit) Position() Position {
 	return u.position
 }
 
