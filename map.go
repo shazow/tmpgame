@@ -63,6 +63,11 @@ type tile bool
 
 type idx int
 
+type xy struct {
+	x int
+	y int
+}
+
 // grid implements Map
 type grid struct {
 	width  int
@@ -74,10 +79,10 @@ func (g grid) index(x int, y int) idx {
 	return idx(x + (y * g.width))
 }
 
-func (g grid) xy(p idx) (int, int) {
+func (g grid) xy(p idx) xy {
 	x := int(p) % g.width
 	y := (int(p) - x) / g.height
-	return x, y
+	return xy{x, y}
 }
 
 func (g grid) move(p idx, dir Direction) idx {
