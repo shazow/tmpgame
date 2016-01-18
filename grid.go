@@ -1,6 +1,20 @@
 package tmpgame
 
+func abs(a int) int {
+	if a < 0 {
+		return -a
+	}
+	return a
+}
+
+// NewWaypoint returns a linked-list implementation of a Waypoint
 func NewWaypoint(positions ...Position) Waypoint {
+	if len(positions) == 1 {
+		return &waypoint{pos: positions[0]}
+	}
+	if len(positions) == 0 {
+		return nil
+	}
 	waypoints := make([]waypoint, len(positions))
 	head := &waypoints[0]
 	tail := &waypoints[0]
@@ -28,6 +42,13 @@ func (w waypoint) Next() Waypoint {
 	return w.next
 }
 
+// Add injects a position into the linked-list of waypoints.
+// TODO: Use a pool for waypoints to reduce allocations?
+func (w *waypoint) Add(pos Position) *waypoint {
+	w.next = &waypoint{pos: pos, next: w.next}
+	return w.next
+}
+
 func NewGrid(width, height int) *grid {
 	return &grid{
 		width:  width,
@@ -50,6 +71,10 @@ type grid struct {
 	width  int
 	height int
 	tiles  []tile
+}
+
+func (g grid) in(pos xy) bool {
+	return 0 <= pos.x && pos.x < g.width && 0 <= pos.y && pos.y < g.height
 }
 
 func (g grid) index(x int, y int) idx {
@@ -91,9 +116,41 @@ func (g grid) move(p idx, dir Direction) idx {
 	return p
 }
 
+// Naive manhattan distance function
+func (g grid) Distance(from Position, to Position) int {
+	a := from.(xy)
+	b := to.(xy)
+	return abs(a.x-b.x) + abs(a.y-b.y)
+}
+
 // Path returns a Waypoint from a position to another position
+// TODO: Replace naive implementation with actual pathfinding.
 func (g grid) Path(from Position, to Position) Waypoint {
-	from = from.(*idx)
-	to = to.(*idx)
-	return nil
+	a := from.(xy)
+	b := to.(xy)
+
+	if a == b {
+		return nil
+	}
+
+	head := &waypoint{pos: a}
+	tail := head
+
+	for {
+		if a.x < b.x {
+			a.x += 1
+		} else if a.x > b.x {
+			a.x -= 1
+		}
+		if a.y < b.y {
+			a.y += 1
+		} else if a.y > b.y {
+			a.y -= 1
+		} else if a.x == b.x {
+			break
+		}
+		head = head.Add(a)
+	}
+
+	return tail
 }

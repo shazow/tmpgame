@@ -1,6 +1,9 @@
 package tmpgame
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestGridIdx(t *testing.T) {
 	g := NewGrid(10, 10)
@@ -61,4 +64,27 @@ func TestGirdMove(t *testing.T) {
 	if pos.x != 4 || pos.y != 3 {
 		t.Errorf("xy is wrong: %s", pos)
 	}
+}
+
+func TestGridPath(t *testing.T) {
+	g := NewGrid(10, 10)
+
+	a, b := xy{0, 0}, xy{3, 3}
+	d := g.Distance(a, b)
+	if d != 6 {
+		t.Errorf("d is wrong: %s", d)
+	}
+
+	expected := []xy{{0, 0}, {0, 1}, {0, 2}}
+	actual := []xy{}
+
+	for w := g.Path(a, b); w != nil; w = w.Next() {
+		t.Logf("%v", w)
+		actual = append(actual, w.Position().(xy))
+	}
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Errorf("path is wrong: %v", actual)
+	}
+
 }
